@@ -1,4 +1,4 @@
-{-# LANGUAGE CPP #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 module Control.Concurrent.Timeout
   ( threadDelay
@@ -7,13 +7,15 @@ module Control.Concurrent.Timeout
   ) where
 
 --------------------------------------------------------------------------------
-import qualified Control.Concurrent as C
+import qualified Control.Concurrent.Lifted   as C
+import           Control.Monad.Base          (MonadBase)
+import           Control.Monad.Trans.Control (MonadBaseControl)
 import           Data.Timeout.Unit
-import qualified System.Timeout     as T
+import qualified System.Timeout.Lifted       as T
 --------------------------------------------------------------------------------
 
-threadDelay :: Timeout -> IO ()
+threadDelay :: MonadBase IO m => Timeout -> m ()
 threadDelay = C.threadDelay . timeoutUs
 
-timeout :: Timeout -> IO a -> IO (Maybe a)
+timeout :: MonadBaseControl IO m => Timeout -> m a -> m (Maybe a)
 timeout = T.timeout . timeoutUs
