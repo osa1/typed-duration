@@ -1,6 +1,22 @@
+{-# LANGUAGE PatternSynonyms #-}
+
 module Data.Timeout.Unit
   ( Timeout (..)
   , TimeoutUnit (..)
+  , pattern Microseconds
+  , pattern Milliseconds
+  , pattern Seconds
+  , pattern Minutes
+  , pattern Hours
+  , pattern Days
+  , pattern Weeks
+  , microseconds
+  , milliseconds
+  , seconds
+  , minutes
+  , hours
+  , days
+  , weeks
   , (#)
   ) where
 
@@ -26,6 +42,27 @@ data TimeoutUnit
   | Week
   deriving (Show, Eq)
 
+pattern Microseconds :: TimeoutUnit
+pattern Microseconds = Microsecond
+
+pattern Milliseconds :: TimeoutUnit
+pattern Milliseconds = Millisecond
+
+pattern Seconds :: TimeoutUnit
+pattern Seconds = Second
+
+pattern Minutes :: TimeoutUnit
+pattern Minutes = Minute
+
+pattern Hours :: TimeoutUnit
+pattern Hours = Hour
+
+pattern Days :: TimeoutUnit
+pattern Days = Day
+
+pattern Weeks :: TimeoutUnit
+pattern Weeks = Week
+
 -- | Make a timeout from a value + unit. Note that this function does not check
 -- overflows. See `TimeoutUnit` for max bounds for units.
 (#) :: Int -> TimeoutUnit -> Timeout
@@ -39,3 +76,12 @@ t # u =
       Hour        -> t * 60 * 60 * 1000000
       Day         -> t * 24 * 60 * 60 * 1000000
       Week        -> t * 7 * 24 * 60 * 60 * 1000000
+
+microseconds, milliseconds, seconds, minutes, hours, days, weeks :: Int -> Timeout
+microseconds t = t # Microseconds
+milliseconds t = t # Milliseconds
+seconds t = t # Seconds
+minutes t = t # Minutes
+hours t = t # Hours
+days t = t # Days
+weeks t = t # Weeks
