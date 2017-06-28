@@ -1,4 +1,5 @@
-{-# LANGUAGE PatternSynonyms #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE PatternSynonyms            #-}
 
 module Data.Duration.Unit
   ( Duration (..)
@@ -18,11 +19,59 @@ module Data.Duration.Unit
   , days
   , weeks
   , (#)
+  , Microseconds
+  , Milliseconds
+  , Seconds
+  , Minutes
+  , Hours
+  , Days
+  , Weeks
+  , ToDuration (..)
   ) where
 
+newtype Microseconds = Microseconds_ Int
+  deriving (Eq, Ord, Num)
+
+instance Show Microseconds where
+  show (Microseconds_ t) = show t ++ " μs"
+
+newtype Milliseconds = Milliseconds_ Int
+  deriving (Eq, Ord, Num)
+
+instance Show Milliseconds where
+  show (Milliseconds_ t) = show t ++ " ms"
+
+newtype Seconds = Seconds_ Int
+  deriving (Eq, Ord, Num)
+
+instance Show Seconds where
+  show (Seconds_ t) = show t ++ " sec"
+
+newtype Minutes = Minutes_ Int
+  deriving (Eq, Ord, Num)
+
+instance Show Minutes where
+  show (Minutes_ t) = show t ++ " min"
+
+newtype Hours = Hours_ Int
+  deriving (Eq, Ord, Num)
+
+instance Show Hours where
+  show (Hours_ t) = show t ++ " hours"
+
+newtype Days = Days_ Int
+  deriving (Eq, Ord, Num)
+
+instance Show Days where
+  show (Days_ t) = show t ++ " days"
+
+newtype Weeks = Weeks_ Int
+  deriving (Eq, Ord, Num)
+
+-- | `Num` methods treat integers as microseconds.
 newtype Duration
   = Duration { durationUs :: Int }
-  deriving (Show, Eq, Ord)
+  deriving (Show, Eq, Ord, Num)
 
 -- | See constructor docs for max duration values for each unit.
 data DurationUnit
@@ -85,3 +134,30 @@ minutes t = t # Minutes
 hours t = t # Hours
 days t = t # Days
 weeks t = t # Weeks
+
+class ToDuration a where
+  toDuration :: a -> Duration
+
+instance ToDuration Duration where
+  toDuration = id
+
+instance ToDuration Microseconds where
+  toDuration (Microseconds_ t) = t # Microseconds
+
+instance ToDuration Milliseconds where
+  toDuration (Milliseconds_ t) = t # Milliseconds
+
+instance ToDuration Seconds where
+  toDuration (Seconds_ t) = t # Seconds
+
+instance ToDuration Minutes where
+  toDuration (Minutes_ t) = t # Minutes
+
+instance ToDuration Hours where
+  toDuration (Hours_ t) = t # Hours
+
+instance ToDuration Days where
+  toDuration (Days_ t) = t # Days
+
+instance ToDuration Weeks where
+  toDuration (Weeks_ t) = t # Weeks
