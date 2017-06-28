@@ -20,17 +20,26 @@ module Data.Duration.Unit
   , weeks
   , (#)
   , Microseconds
+  , Microsecond
   , Milliseconds
+  , Millisecond
   , Seconds
+  , Second
   , Minutes
+  , Minute
   , Hours
+  , Hour
   , Days
+  , Day
   , Weeks
+  , Week
   , ToDuration (..)
   ) where
 
 newtype Microseconds = Microseconds_ Int
   deriving (Eq, Ord, Num)
+
+type Microsecond = Microseconds
 
 instance Show Microseconds where
   show (Microseconds_ t) = show t ++ " μs"
@@ -38,11 +47,15 @@ instance Show Microseconds where
 newtype Milliseconds = Milliseconds_ Int
   deriving (Eq, Ord, Num)
 
+type Millisecond = Milliseconds
+
 instance Show Milliseconds where
   show (Milliseconds_ t) = show t ++ " ms"
 
 newtype Seconds = Seconds_ Int
   deriving (Eq, Ord, Num)
+
+type Second = Seconds
 
 instance Show Seconds where
   show (Seconds_ t) = show t ++ " sec"
@@ -50,11 +63,15 @@ instance Show Seconds where
 newtype Minutes = Minutes_ Int
   deriving (Eq, Ord, Num)
 
+type Minute = Minutes
+
 instance Show Minutes where
   show (Minutes_ t) = show t ++ " min"
 
 newtype Hours = Hours_ Int
   deriving (Eq, Ord, Num)
+
+type Hour = Hours
 
 instance Show Hours where
   show (Hours_ t) = show t ++ " hours"
@@ -62,11 +79,15 @@ instance Show Hours where
 newtype Days = Days_ Int
   deriving (Eq, Ord, Num)
 
+type Day = Days
+
 instance Show Days where
   show (Days_ t) = show t ++ " days"
 
 newtype Weeks = Weeks_ Int
   deriving (Eq, Ord, Num)
+
+type Week = Weeks
 
 -- | `Num` methods treat integers as microseconds.
 newtype Duration
