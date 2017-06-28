@@ -3,19 +3,19 @@
 module Control.Concurrent.Timeout
   ( threadDelay
   , timeout
-  , module Data.Timeout.Unit
+  , module Data.Duration.Unit
   ) where
 
 --------------------------------------------------------------------------------
 import qualified Control.Concurrent.Lifted   as C
 import           Control.Monad.Base          (MonadBase)
 import           Control.Monad.Trans.Control (MonadBaseControl)
-import           Data.Timeout.Unit
+import           Data.Duration.Unit
 import qualified System.Timeout.Lifted       as T
 --------------------------------------------------------------------------------
 
-threadDelay :: MonadBase IO m => Timeout -> m ()
-threadDelay = C.threadDelay . timeoutUs
+threadDelay :: MonadBase IO m => Duration -> m ()
+threadDelay = C.threadDelay . durationUs
 
-timeout :: MonadBaseControl IO m => Timeout -> m a -> m (Maybe a)
-timeout = T.timeout . timeoutUs
+timeout :: MonadBaseControl IO m => Duration -> m a -> m (Maybe a)
+timeout = T.timeout . durationUs

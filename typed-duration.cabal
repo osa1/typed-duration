@@ -1,9 +1,9 @@
-name:                typed-timeout
+name:                typed-duration
 version:             0.1.0.0
 synopsis:
     Thread delay and timeout functions with typed arguments
 -- description:
-homepage:            https://github.com/osa1/typed-timeout#readme
+homepage:            https://github.com/osa1/typed-duration#readme
 license:             BSD3
 license-file:        LICENSE
 author:              Ömer Sinan Ağacan
@@ -18,7 +18,7 @@ cabal-version:       >=1.10
 
 source-repository head
   type:     git
-  location: https://github.com/osa1/typed-timeout
+  location: https://github.com/osa1/typed-duration
 
 flag use-atomic-counter
   default: False
@@ -29,7 +29,7 @@ library
 
   exposed-modules:
     Control.Concurrent.Timeout
-    Data.Timeout.Unit
+    Data.Duration.Unit
 
   build-depends:
     base >= 4.7 && < 5,

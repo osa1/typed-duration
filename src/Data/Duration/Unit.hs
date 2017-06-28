@@ -1,8 +1,8 @@
 {-# LANGUAGE PatternSynonyms #-}
 
-module Data.Timeout.Unit
-  ( Timeout (..)
-  , TimeoutUnit (..)
+module Data.Duration.Unit
+  ( Duration (..)
+  , DurationUnit (..)
   , pattern Microseconds
   , pattern Milliseconds
   , pattern Seconds
@@ -20,12 +20,12 @@ module Data.Timeout.Unit
   , (#)
   ) where
 
-newtype Timeout
-  = Timeout { timeoutUs :: Int }
+newtype Duration
+  = Duration { durationUs :: Int }
   deriving (Show, Eq, Ord)
 
--- | See constructor docs for max timeout values for each unit.
-data TimeoutUnit
+-- | See constructor docs for max duration values for each unit.
+data DurationUnit
   -- | Max bound: 9223372036854775807
   = Microsecond
   -- | Max bound: 9223372036854775
@@ -42,32 +42,32 @@ data TimeoutUnit
   | Week
   deriving (Show, Eq)
 
-pattern Microseconds :: TimeoutUnit
+pattern Microseconds :: DurationUnit
 pattern Microseconds = Microsecond
 
-pattern Milliseconds :: TimeoutUnit
+pattern Milliseconds :: DurationUnit
 pattern Milliseconds = Millisecond
 
-pattern Seconds :: TimeoutUnit
+pattern Seconds :: DurationUnit
 pattern Seconds = Second
 
-pattern Minutes :: TimeoutUnit
+pattern Minutes :: DurationUnit
 pattern Minutes = Minute
 
-pattern Hours :: TimeoutUnit
+pattern Hours :: DurationUnit
 pattern Hours = Hour
 
-pattern Days :: TimeoutUnit
+pattern Days :: DurationUnit
 pattern Days = Day
 
-pattern Weeks :: TimeoutUnit
+pattern Weeks :: DurationUnit
 pattern Weeks = Week
 
--- | Make a timeout from a value + unit. Note that this function does not check
--- overflows. See `TimeoutUnit` for max bounds for units.
-(#) :: Int -> TimeoutUnit -> Timeout
+-- | Make a duration from a value + unit. Note that this function does not check
+-- overflows. See `DurationUnit` for max bounds for units.
+(#) :: Int -> DurationUnit -> Duration
 t # u =
-    Timeout $
+    Duration $
     case u of
       Microsecond -> t
       Millisecond -> t * 1000
@@ -77,7 +77,7 @@ t # u =
       Day         -> t * 24 * 60 * 60 * 1000000
       Week        -> t * 7 * 24 * 60 * 60 * 1000000
 
-microseconds, milliseconds, seconds, minutes, hours, days, weeks :: Int -> Timeout
+microseconds, milliseconds, seconds, minutes, hours, days, weeks :: Int -> Duration
 microseconds t = t # Microseconds
 milliseconds t = t # Milliseconds
 seconds t = t # Seconds
