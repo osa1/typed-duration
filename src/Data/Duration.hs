@@ -1,9 +1,14 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE PatternSynonyms            #-}
 
-module Data.Duration.Unit
-  ( Duration (..)
+-- | Definition of `Duration` and various other types, constructors and functions for building
+-- `Duration`s.
+module Data.Duration
+  (
+    -- * Duration type
+    Duration (..)
   , DurationUnit (..)
+  , (#)
   , pattern Microseconds
   , pattern Milliseconds
   , pattern Seconds
@@ -11,6 +16,8 @@ module Data.Duration.Unit
   , pattern Hours
   , pattern Days
   , pattern Weeks
+
+    -- * Non-operators for building durations
   , microseconds
   , milliseconds
   , seconds
@@ -18,7 +25,8 @@ module Data.Duration.Unit
   , hours
   , days
   , weeks
-  , (#)
+
+    -- * `Num` types for building durations from integer literals
   , Microseconds
   , Microsecond
   , Milliseconds
@@ -35,6 +43,75 @@ module Data.Duration.Unit
   , Week
   , ToDuration (..)
   ) where
+
+--------------------------------------------------------------------------------
+
+-- | A microsecond precision duration, represented as an integer.
+newtype Duration = Duration
+  { -- | Duration in microseconds
+    durationUs :: Int
+  } deriving (Eq, Ord, Num)
+
+instance Show Duration where
+  show (Duration us) = show (Microseconds_ us)
+
+-- | `Duration` units to be used with `#`. See constructor docs for max duration
+-- values for each unit.
+data DurationUnit
+  -- | Max bound: 9223372036854775807
+  = Microsecond
+  -- | Max bound: 9223372036854775
+  | Millisecond
+  -- | Max bound: 9223372036854
+  | Second
+  -- | Max bound: 153722867280
+  | Minute
+  -- | Max bound: 2562047788
+  | Hour
+  -- | Max bound: 106751991
+  | Day
+  -- | Max bound: 15250284
+  | Week
+  deriving (Show, Eq)
+
+pattern Microseconds :: DurationUnit
+pattern Microseconds = Microsecond
+
+pattern Milliseconds :: DurationUnit
+pattern Milliseconds = Millisecond
+
+pattern Seconds :: DurationUnit
+pattern Seconds = Second
+
+pattern Minutes :: DurationUnit
+pattern Minutes = Minute
+
+pattern Hours :: DurationUnit
+pattern Hours = Hour
+
+pattern Days :: DurationUnit
+pattern Days = Day
+
+pattern Weeks :: DurationUnit
+pattern Weeks = Week
+
+-- | Make a duration from a value + unit. Note that this function does not check
+-- overflows. See `DurationUnit` for max bounds for units.
+(#) :: Int -> DurationUnit -> Duration
+t # u =
+    Duration $
+    case u of
+      Microsecond -> t
+      Millisecond -> t * 1000
+      Second      -> t * 1000000
+      Minute      -> t * 60 * 1000000
+      Hour        -> t * 60 * 60 * 1000000
+      Day         -> t * 24 * 60 * 60 * 1000000
+      Week        -> t * 7 * 24 * 60 * 60 * 1000000
+
+--------------------------------------------------------------------------------
+-- * `Num` types and `ToDuration` typeclass for building durations with just
+-- integer literals and type annotations.
 
 newtype Microseconds = Microseconds_ Int
   deriving (Eq, Ord, Num)
@@ -88,64 +165,6 @@ newtype Weeks = Weeks_ Int
   deriving (Eq, Ord, Num)
 
 type Week = Weeks
-
--- | `Num` methods treat integers as microseconds.
-newtype Duration
-  = Duration { durationUs :: Int }
-  deriving (Show, Eq, Ord, Num)
-
--- | See constructor docs for max duration values for each unit.
-data DurationUnit
-  -- | Max bound: 9223372036854775807
-  = Microsecond
-  -- | Max bound: 9223372036854775
-  | Millisecond
-  -- | Max bound: 9223372036854
-  | Second
-  -- | Max bound: 153722867280
-  | Minute
-  -- | Max bound: 2562047788
-  | Hour
-  -- | Max bound: 106751991
-  | Day
-  -- | Max bound: 15250284
-  | Week
-  deriving (Show, Eq)
-
-pattern Microseconds :: DurationUnit
-pattern Microseconds = Microsecond
-
-pattern Milliseconds :: DurationUnit
-pattern Milliseconds = Millisecond
-
-pattern Seconds :: DurationUnit
-pattern Seconds = Second
-
-pattern Minutes :: DurationUnit
-pattern Minutes = Minute
-
-pattern Hours :: DurationUnit
-pattern Hours = Hour
-
-pattern Days :: DurationUnit
-pattern Days = Day
-
-pattern Weeks :: DurationUnit
-pattern Weeks = Week
-
--- | Make a duration from a value + unit. Note that this function does not check
--- overflows. See `DurationUnit` for max bounds for units.
-(#) :: Int -> DurationUnit -> Duration
-t # u =
-    Duration $
-    case u of
-      Microsecond -> t
-      Millisecond -> t * 1000
-      Second      -> t * 1000000
-      Minute      -> t * 60 * 1000000
-      Hour        -> t * 60 * 60 * 1000000
-      Day         -> t * 24 * 60 * 60 * 1000000
-      Week        -> t * 7 * 24 * 60 * 60 * 1000000
 
 microseconds, milliseconds, seconds, minutes, hours, days, weeks :: Int -> Duration
 microseconds t = t # Microseconds

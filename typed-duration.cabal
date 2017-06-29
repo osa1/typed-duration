@@ -2,14 +2,15 @@ name:                typed-duration
 version:             0.1.0.0
 synopsis:
     Thread delay and timeout functions with typed arguments
--- description:
+description:
+    Experimental
 homepage:            https://github.com/osa1/typed-duration#readme
 license:             BSD3
 license-file:        LICENSE
 author:              Ömer Sinan Ağacan
 maintainer:          Ömer Sinan Ağacan <omeragacan@gmail.com>
 copyright:           2017 Ömer Sinan Ağacan
-category:            Web
+category:            Data, Concurrency
 build-type:          Simple
 extra-source-files:
     CHANGELOG.md
@@ -20,16 +21,12 @@ source-repository head
   type:     git
   location: https://github.com/osa1/typed-duration
 
-flag use-atomic-counter
-  default: False
-  manual: True
-
 library
   hs-source-dirs:      src
 
   exposed-modules:
     Control.Concurrent.Timeout
-    Data.Duration.Unit
+    Data.Duration
 
   build-depends:
     base >= 4.7 && < 5,
