@@ -27,19 +27,19 @@ module Data.Duration
   , weeks
 
     -- * `Num` types for building durations from integer literals
-  , Microseconds
+  , Microseconds (..)
   , Microsecond
-  , Milliseconds
+  , Milliseconds (..)
   , Millisecond
-  , Seconds
+  , Seconds (..)
   , Second
-  , Minutes
+  , Minutes (..)
   , Minute
-  , Hours
+  , Hours (..)
   , Hour
-  , Days
+  , Days (..)
   , Day
-  , Weeks
+  , Weeks (..)
   , Week
   , ToDuration (..)
   ) where
@@ -113,7 +113,7 @@ t # u =
 -- * `Num` types and `ToDuration` typeclass for building durations with just
 -- integer literals and type annotations.
 
-newtype Microseconds = Microseconds_ Int
+newtype Microseconds = Microseconds_ { microsecondsInt :: Int }
   deriving (Eq, Ord, Num)
 
 type Microsecond = Microseconds
@@ -121,7 +121,7 @@ type Microsecond = Microseconds
 instance Show Microseconds where
   show (Microseconds_ t) = show t ++ " μs"
 
-newtype Milliseconds = Milliseconds_ Int
+newtype Milliseconds = Milliseconds_ { millisecondsInt :: Int }
   deriving (Eq, Ord, Num)
 
 type Millisecond = Milliseconds
@@ -129,7 +129,7 @@ type Millisecond = Milliseconds
 instance Show Milliseconds where
   show (Milliseconds_ t) = show t ++ " ms"
 
-newtype Seconds = Seconds_ Int
+newtype Seconds = Seconds_ { secondsInt :: Int }
   deriving (Eq, Ord, Num)
 
 type Second = Seconds
@@ -137,7 +137,7 @@ type Second = Seconds
 instance Show Seconds where
   show (Seconds_ t) = show t ++ " sec"
 
-newtype Minutes = Minutes_ Int
+newtype Minutes = Minutes_ { minutesInt :: Int }
   deriving (Eq, Ord, Num)
 
 type Minute = Minutes
@@ -145,7 +145,7 @@ type Minute = Minutes
 instance Show Minutes where
   show (Minutes_ t) = show t ++ " min"
 
-newtype Hours = Hours_ Int
+newtype Hours = Hours_ { hoursInt :: Int }
   deriving (Eq, Ord, Num)
 
 type Hour = Hours
@@ -153,7 +153,7 @@ type Hour = Hours
 instance Show Hours where
   show (Hours_ t) = show t ++ " hours"
 
-newtype Days = Days_ Int
+newtype Days = Days_ { daysInt :: Int }
   deriving (Eq, Ord, Num)
 
 type Day = Days
@@ -161,7 +161,7 @@ type Day = Days
 instance Show Days where
   show (Days_ t) = show t ++ " days"
 
-newtype Weeks = Weeks_ Int
+newtype Weeks = Weeks_ { weeksInt :: Int }
   deriving (Eq, Ord, Num)
 
 type Week = Weeks
